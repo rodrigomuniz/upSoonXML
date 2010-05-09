@@ -1,0 +1,11 @@
+:)
+
+Para configurar o sistema é 1, 2, 3, 4:
+
+1. Renomeie o arquivo 'subscribers.xml' para um nome de sua escolha, de preferência um que não seja fácil de descobrir para que o arquivo não seja baixado do servidor por curiosos;
+
+2. Abra o arquivo 'index.php' e na área de CONFIGURACOES informe o novo nome que você deu ao arquivo xml;
+
+3. Em 'Chave de seguranca' informe uma chave só sua;
+
+4. Informe o nome do site ou do cliente. Você também pode ocultar o logotipo da página na opção 'Mostrar Logotipo' ou editar a imagem 'logo.png'.
