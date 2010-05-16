@@ -27,9 +27,22 @@ $sitename = "ACME";
 /** false = (Opcional) true = (Obrigatorio) */
 $nreq = false;
 
-/** 5. Mostrar Logotipo? */
-/** false = (Oculta) true = (Mostra) */
-$logo = true;
+/** 5. URL da imagem para usar como Logotipo */
+/** vazio = (Oculta logo) */
+$logo = 'http://labs.rodrigomuniz.com/upsoonXML/logo.png';
+
+/** 6. Indexar nos Mercanismos de Busca como Google? */
+/** false = (Nao) true = (Sim) */
+$index = true;
+
+/** 7. Data de lançamento? */
+/** vazio = (Oculta data), ex.: 01.06.2010 */
+$when = "";
+
+/** 8. Mostrar titulo e/ou subtitulo? */
+/** false = (Nao) true = (Sim) */
+$h1 = true;
+$h2 = true;
 
 /** Pronto, pode parar de editar o PHP */
 
@@ -95,14 +108,15 @@ if(!file_exists($dbname)) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Novo site em breve... - <?=$sitename?></title>
 <meta name="author" content="Wenetus Interactive - www.wenetus.com" />
+<? if(!$index){ ?>
+<meta name="robots" content="noindex, nofollow" />
+<? } ?>
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta http-equiv="imagetoolbar" content="no" />
 
 <? /*CSS no header para nao precisar de mais um arquivo no servidor*/ ?>
 <style type="text/css">
-html{
-	border-top: 10px solid #f0f0f0;
-}
+html{border-top: 10px solid #f0f0f0}
 body {
 	background-color: #FFF;
 	font-family: Helvetica, Arial, sans-serif;
@@ -119,8 +133,7 @@ form {
 	text-align: left;
 	margin: 0 auto;
 	padding: 25px 3px; 
-	width: 450px;
-		display: none; /*jquery*/
+	width: 450px
 }
 fieldset {
 	border: 1px solid #ddd;
@@ -192,14 +205,13 @@ form .sub {
 ul#alert {list-style: none}
 ul#alert li {padding-bottom: 10px}
 .priv {
-	font-size: 12px;
-	padding: 6px 30px 6px 103px;
+	font-size: 11px;
+	padding: 4px 70px 6px 103px;
 	margin: 0 auto;
-	width: 311px;
+	width: 271px;
 	background: #f6f6f6;
 	float: left;
-	clear: both;
-	display: none; /*jquery*/
+	clear: both
 }
 h1, h2 {
 	font-family: 'Helvetica Neue UltraLight', 'HelveticaNeue-UltraLight', 'Century Gothic', Helvetica, Arial, sans-serif;
@@ -227,72 +239,71 @@ h2 strong {
 	color: #8e8e8e;
 	z-index: 100;
 }
-
-.form-e {display:block}
 </style>
 
-</head>
+<?php
+if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') ){ //if IE ?>
+<!--[if lt IE 8]>
+<style type="text/css">
+.priv {
+	width: 275px;
+}
+.hint {
+	background: #fff;
+	top: 10px
+}
+fieldset label {padding: 3px 4px 0 0}
+form .sub {
+	overflow: visible;
+	padding:1px 3px
+}
+legend {
+	margin: 0 auto;
+	text-align: center;
+	width:94%;
+}
+</style>
+<![endif]-->
 
-<body>
+<!--[if IE 6]>
+<style type="text/css">
+form .sub {
+	clear:none;
+	margin-right: 40px
+}
+#alert {
+	left: 50%;
+	margin-left: -25px;
+	position:absolute;
+}
+</style>
+<![endif]-->
 
-<?php if($e){ //escreve mensagens de erro ?>
-	<ul id="alert" title="Fechar">
-	<?=$e?>
-	</ul>
-<? } ?>
-
-<?php if($logo){ //insere logo ?>
-	<img src="logo.png" alt="Logotipo" />
-<? } ?>
-
-<h1>Falta pouco!</h1>
-	<h2>O novo site <strong><?=$sitename?></strong> está quase pronto.</h2>
-
-<?php if($sent==false) { //oculta form depois de assinado ?>
-
-<form action="index.php" method="post"<?php if($e){?> class="form-e"<? } ?>>
-	<fieldset>
-	<legend>Quer ser avisado quando o site for lançado?</legend>
-
-	<ul>
-		<li>
-			<label for="email">E-mail</label>
-			<input type="text" name="email" id="email" value="<?=$email?>" />
-			<p class="priv">Garantimos usar seu e-mail apenas para o aviso. Também odiamos SPAM.</p>
-		</li>
-		<li>
-			<label for="name">Nome <? if($nreq==false) {?><span class="opc">(Opcional)</span><? } ?></label>
-			<input type="hidden" name="token" value="<?=$secret;?>" />
-			<input type="text" name="name" id="name" value="<?=$name?>" />
-		</li>
-	</ul>
-	<input type="submit" name="send" value="Sim. Quero ser avisado." class="sub" />
-	</fieldset>
-</form>
-
-<? } else { // mensagem de sucesso ?>
-	<p>Oba! Você está inscrito e será avisado no lançamento.</p>
-<? } ?>
-
+<!--[if IE 7]>
+<style type="text/css">
+form .sub {margin-right: 79px}
+</style>
+<![endif]-->
+<? } //if IE ?>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 
 <?php if(!$e){ //animacao inicial, nao executa quando a validacao retorna erro ?>
-function toFade() {//leva o bg para o pixel 1024
+function toFade() { <? //diminui a opacidade ?>
 	$(".priv").animate({opacity: '+=-0.5'}, 2000, function() {
-			resetFade();
+		resetFade();
 	});
 }
-function resetFade(){//seta o bg para o lugar de origem e reinicia a animacao
+function resetFade(){ <? //aumenta a opacidade ?>
 	$(".priv").animate({opacity: '+=1.5'}, 1000, function(){
-	toFade();
-});
+		toFade();
+	});
 }
-
+$("form, .priv").hide(); <? //oculta ?>
 $("form").slideDown(600,function(){
 	$(".priv").slideDown(400, function(){
-			toFade();//inicia respiracao
+			toFade(); <? //inicia respiracao ?>
 	});
 });
 <? } ?>
@@ -347,7 +358,59 @@ $("#name").keyup(function(){
 });
 
 <? } ?>
+
 });
 </script>
+
+</head>
+
+<body>
+
+<?php if($e){ //escreve mensagens de erro ?>
+	<ul id="alert" title="Fechar">
+	<?=$e?>
+	</ul>
+<? } ?>
+
+<?php if($logo){ //insere logo ?>
+	<img src="<?=$logo?>" alt="Logotipo" />
+<? } ?>
+
+<? if($h1){ ?>
+<h1>Falta pouco!</h1>
+<? } ?>
+
+<? if($h2){ ?>
+	<h2>O novo site <strong><?=$sitename?></strong> está quase pronto.<? if($when){?> <br />Previsão de lançamento em <?=$when?><? }?></h2>
+<? } ?>
+
+<?php if($sent==false) { //oculta form depois do sucesso ?>
+
+<form action="index.php" method="post">
+	<fieldset>
+	<legend>Quer ser avisado quando o site for lançado?</legend>
+
+	<ul>
+		<li>
+			<label for="email">E-mail</label>
+			<input type="text" name="email" id="email" value="<?=$email?>" />
+			<?php if(!$e){?>
+			<p class="priv">Garantimos usar seu e-mail apenas para o aviso. Também odiamos SPAM.</p>
+			<? } ?>
+		</li>
+		<li>
+			<label for="name">Nome <? if($nreq==false) {?><span class="opc">(Opcional)</span><? } ?></label>
+			<input type="hidden" name="token" id="token" value="<?=$secret;?>" />
+			<input type="text" name="name" id="name" value="<?=$name?>" />
+		</li>
+	</ul>
+	<input type="submit" name="send" value="Sim. Quero ser avisado." class="sub" />
+	</fieldset>
+</form>
+
+<? } else { // mensagem de sucesso ?>
+	<p>Oba! Você está inscrito e será avisado no lançamento.</p>
+<? } ?>
+
 </body>
 </html>
