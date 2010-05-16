@@ -46,6 +46,11 @@ $h2 = true;
 
 /** Pronto, pode parar de editar o PHP */
 
+
+
+
+
+
 // mensagens
 $e = false;
 $sent = false;
@@ -54,6 +59,56 @@ $sent = false;
 if(!file_exists($dbname)) {
 	$e .= "<li>ATENÇÃO. O arquivo XML para armazenar os assinantes não foi encontrado.</li>";
 } else { //xml encontrado
+
+if(isset($_POST['ax'])) {//se submeteu via ajax ignora o resto do php
+		$token = $_POST['token'];
+	if(is_token_valid($token, $yourkey)) {
+		$email = trim($_POST['email']);
+		$name = trim($_POST['name']);
+		$xml = new SimpleXMLElement($dbname, 0, true);
+
+		//email em branco?
+		if($email == "") {
+			$e.= "<li>Por favor, preencha o campo de e-mail</li>";
+		} else { //email preenchido
+			//email valido?
+			if( !check_email_address($email) ){
+				$e .= "<li>Por favor, verifique a digitação. <strong>$email</strong> não é um endereço de e-mail válido.</li>";
+			}
+			
+		//email ja cadastrado?
+		foreach($xml->user as $u) {
+			if($email == $u->email) {
+			$e.= "<li>O email <strong>$email</strong> já consta na nossa lista e será avisado.</li>";
+			}
+		}
+}
+
+		//nome em branco?
+		if ($nreq==true) {//opcao de nome obrigatorio
+			if($name == "") {
+				$e.= "<li>Por favor, preencha o campo de nome</li>";
+			}
+		}
+		
+		//se nao ha erros entao adiciona o email e o nome
+		if($e == false){
+			$xml = new SimpleXMLElement($dbname, 0, true);
+			$user = $xml[0]->addChild('user');
+			$user->addChild('email', $email);
+			$user->addChild('realname', $name);
+			$user->addChild('time', time());
+			$xml->asXML($dbname);
+
+			$sent = true;
+
+			$e.= $sent;
+		}
+	echo $e;
+	}//token
+} else {
+
+//sem ajax
 		$secret = auth_token($yourkey);
 	if(isset($_POST['send'])) {
 		$token = $_POST['token'];
@@ -98,10 +153,11 @@ if(!file_exists($dbname)) {
 			$sent = true;
 		}
 	} //token
-	}//se submeteu o form
-
+	}//se submeteu o form sem ajax
+  }//se submeteu com ajax
 }//se xml existe
-?>
+
+if(!isset($_POST['ax'])) { //nao escrever pagina no ajax ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
 <head profile="http://gmpg.org/xfn/11">
@@ -288,8 +344,51 @@ form .sub {margin-right: 79px}
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+function remAlert() {
+	$('#alert').fadeOut('fast').remove('#alert');
+	$('#email').focus();
+}
+<? // ajax ?>
+$('#loading').hide();
+var erBlock = "<ul id='alert' title='Fechar'></ul>";
 
-<?php if(!$e){ //animacao inicial, nao executa quando a validacao retorna erro ?>
+function processReturn(data){
+	if(data == 1) {
+		if($("#alert").remove("#alert"));
+				$("form fieldset").slideUp();
+				$("form").before("<p>Oba! Você está inscrito e será avisado no lançamento.</p>");
+	} else {
+		if($("#alert").remove("#alert"));
+		$('body').append(erBlock);
+		$("#alert").append(data);
+		animAlert();
+		$('#alert').click(function(){remAlert();});
+	}
+}
+
+$('.sub').click(function(){
+        $('.sub').ajaxStart(function(){
+			$(this).val('Analisando...').css('color', '#ff0000');
+        });
+        $('.sub').ajaxStop(function(){
+            $(this).val('Sim. Quero ser avisado.').css('color', '#000');   
+        });
+        $.post('index.php',
+        {ax:true, token: $('#token').val(), email: $('#email').val(), name: $('#name').val()},
+        function(data){
+                if (data !=''){
+                	processReturn(data);
+                }
+                else{
+                	alert('O servidor não respondeu ao envio, por favor tente novamente.');
+                }
+        });
+return false;
+});
+
+<?php if(!$e){ //animacao de respiracao ?>
+$("form, .priv").hide(); <? //oculta inicialmente ?>
+
 function toFade() { <? //diminui a opacidade ?>
 	$(".priv").animate({opacity: '+=-0.5'}, 2000, function() {
 		resetFade();
@@ -300,26 +399,21 @@ function resetFade(){ <? //aumenta a opacidade ?>
 		toFade();
 	});
 }
-$("form, .priv").hide(); <? //oculta ?>
 $("form").slideDown(600,function(){
 	$(".priv").slideDown(400, function(){
 			toFade(); <? //inicia respiracao ?>
 	});
 });
 <? } ?>
-	
-<?php if($e){ //escreve mensagens de erro ?>
-$("#alert").animate({left: '+=-16'}, 70)
-	.animate({left: '+=8'}, 70)
-	.animate({left: '+=-8'}, 70)
-	.animate({left: '+=8'}, 70)
-	.animate({left: '+=-8'}, 70)
-	.animate({left: '+=4'}, 70);
-$("#alert").click(function(){
-	$(this).fadeOut('fast');
-	$('#email').focus();
-});
-<? } ?>
+
+function animAlert() {
+	$("#alert").animate({left: '+=-16'}, 70)
+		.animate({left: '+=8'}, 70)
+		.animate({left: '+=-8'}, 70)
+		.animate({left: '+=8'}, 70)
+		.animate({left: '+=-8'}, 70)
+		.animate({left: '+=4'}, 70);
+}
 
 <? if($nreq==false) {//hint ?>
 $(".opc").addClass('hint').click(function(){
@@ -356,9 +450,7 @@ $("#name").keyup(function(){
 		hideHint();
 	}
 });
-
 <? } ?>
-
 });
 </script>
 
@@ -414,3 +506,4 @@ $("#name").keyup(function(){
 
 </body>
 </html>
+<? } //nao escrever pagina no ajax ?>
