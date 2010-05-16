@@ -44,8 +44,8 @@ $index = true;
 
 // ====================================== 
 /** 7. Temos uma data de lançamento? */
-/** vazio = (Oculta data), ex.: 01.06.2010 */
-$when = "";
+/** vazio = (Oculta)*/
+$when = "01.06.2010";
 
 // ====================================== 
 /** 8. Google Analytics UA */
@@ -535,7 +535,7 @@ $("#name").keyup(function(){
 <? } ?>
 
 <? if($h2){ ?>
-	<h2>O novo site <strong><?=$siteName?></strong> está quase pronto.<? if($when){?> <br />Previsão de lançamento em <?=$when?><? }?></h2>
+	<h2>O novo site <strong><?=$siteName?></strong> está quase pronto.<? if($when){?> <br />Previsão de lançamento em <?=$when?><? }?>.</h2>
 <? } ?>
 
 <?php
