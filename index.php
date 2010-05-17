@@ -380,6 +380,7 @@ form .sub {margin-right: 79px}
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+$('#email').focus();
 <?
 // ====================================== 
 // JS AJAX
@@ -387,7 +388,6 @@ $(document).ready(function() {
 function remAlert() {
 	if($('#alert')){
 		$('#alert').fadeOut('fast').remove('#alert');
-		$('#email').focus();
 	}
 }
 var erBlock = "<ul id='alert' title='Fechar'></ul>";
