@@ -17,4 +17,4 @@ You know when your webapp it's not ready yet, you have nothing to publish and al
 
 Demo
 -------
-[Check it out (in english soon)](http://labs.rodrigomuniz.com/upsoonXML/)
+[Check it out](http://labs.rodrigomuniz.com/upsoonXML/)
