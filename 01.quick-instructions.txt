@@ -1,0 +1,38 @@
+==========
+English
+==========
+
+Hey :)
+
+To configure this little system is 1, 2, 3, 4:
+
+1. Rename the file 'subscribers.xml' to a name of your choice, one that it's not easy to guess so bad guys can't download your subscribers list;
+
+2. Open the file 'config.php' in you favorite text editor and change the CONFIGURATIONS section, telling the new name of your xml file from step 1;
+
+3. In 'Security key' put a radom key of your choice;
+
+4. Put the name of your project or client in the same section. You can also put the URL of a logo which will appear at the top of the page. There's other information to fill like launch date, your Google Analytics code and the choice to prevent Google and other search engines from index your page.
+
+Have fun!
+
+
+
+
+==========
+Português
+==========
+
+Olá :)
+
+Para configurar o sisteminha é 1, 2, 3, 4:
+
+1. Renomeie o arquivo 'subscribers.xml' para um nome de sua escolha, de preferência um que não seja fácil de descobrir para que o arquivo não seja baixado do servidor por curiosos;
+
+2. Abra o arquivo 'config.php' no seu editor preferido e na área de CONFIGURACOES informe o novo nome que você deu ao arquivo xml;
+
+3. Em 'Chave de seguranca' informe uma chave só sua;
+
+4. Informe o nome do site ou do cliente. Você também pode informar a URL do logotipo exibido no topo da página entre outras opções como, data prevista para o lançamento, código do Google Analytics e escolher não indexar a página em mecanismos de busca.
+
+Divirta-se!
