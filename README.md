@@ -7,7 +7,7 @@ You know when your webapp it's not ready yet, you have nothing to publish and al
 * Simple and minimalist
 * Very useful
 * Folderless
-* SGBDless :P (there's no complicated Databases)
+* DBless :P (there's no complicated Databases)
 * Universal design
 * Fun to use
 
@@ -17,9 +17,9 @@ Some features
 -------
 * Easy setup
 * Languages: English and Portuguese
-* Ajax form
+* AJAX form
 * Works without JavaScript
-* Uses token for more secure form submission
+* Uses tokens for secure form submission
 * Small screen iOS and Android device optimization
 * Compatible with IE7 or later
 
